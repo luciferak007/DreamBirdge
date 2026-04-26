@@ -1,7 +1,10 @@
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 export default function JobCard({ job }) {
-  const salary = job.salaryMin && job.salaryMax ? `$${(job.salaryMin/1000).toFixed(0)}k–$${(job.salaryMax/1000).toFixed(0)}k` : 'Competitive'
+ const salary =
+    job.salaryMin && job.salaryMax
+      ? `₹${(job.salaryMin / 100000).toFixed(1)}L – ₹${(job.salaryMax / 100000).toFixed(1)}L`
+      : 'Competitive'
   return (
     <motion.div whileHover={{ y: -4 }} transition={{ type: 'spring', stiffness: 300 }} className="card flex flex-col gap-3">
       <div className="flex items-start justify-between gap-3">
