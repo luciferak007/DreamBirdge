@@ -57,7 +57,8 @@ export const uploadsApi = {
 export const resolveUploadUrl = (path) => {
   if (!path) return ''
   if (/^https?:\/\//i.test(path)) return path
-  const base = (import.meta.env.VITE_API_URL || 'http://localhost:8080/api').replace(/\/api\/?$/, '')
+  const base = (import.meta.env.VITE_API_URL || 'https://dreambirdge-nr0j.onrender.com/api')
+  .replace(/\/api\/?$/, '')
   return base + path
 }
 
