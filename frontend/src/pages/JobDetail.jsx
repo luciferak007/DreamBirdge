@@ -35,7 +35,15 @@ export default function JobDetail() {
   }
   if (loading) return <PageWrap><Spinner label="Loading job" /></PageWrap>
   if (!job) return null
-  const salary = job.salaryMin && job.salaryMax ? `$${(job.salaryMin/1000).toFixed(0)}k – $${(job.salaryMax/1000).toFixed(0)}k` : 'Competitive'
+  const formatLPA = (value) => {
+  if (!value) return null;
+  return (value / 100000).toFixed(1) + " LPA";
+};
+
+const salary =
+  job.salaryMin && job.salaryMax
+    ? `₹${formatLPA(job.salaryMin)} – ₹${formatLPA(job.salaryMax)}`
+    : "Competitive";
   return (
     <PageWrap>
       <Link to="/jobs" className="text-sm text-brand-600 hover:underline">← Back to jobs</Link>
