@@ -30,7 +30,6 @@ export default function Login() {
             <button disabled={loading} className="btn-primary w-full">{loading ? 'Signing in…' : 'Sign in'}</button>
           </form>
           <p className="mt-4 text-sm text-slate-600 text-center">No account? <Link to="/register" className="text-brand-600 font-medium">Create one</Link></p>
-          <p className="mt-3 text-xs text-slate-400 text-center">Demo: seeker@demo.com / employer@demo.com — password: password123</p>
         </motion.div>
       </PageWrap>
     </div>
