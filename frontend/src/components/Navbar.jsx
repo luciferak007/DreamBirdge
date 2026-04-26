@@ -16,20 +16,32 @@ export default function Navbar() {
           <motion.div
             whileHover={{ rotate: 8, scale: 1.05 }}
             className="h-9 w-9 rounded-xl bg-gradient-to-br from-brand-500 to-indigo-600 grid place-items-center text-white font-extrabold tracking-tight shadow-md"
-            aria-label="AK brand"
-            title="AK"
+            aria-label="D_B brand"
+            title="D_B"
           >
-            AK
+            D_B
           </motion.div>
-          <span className="text-lg font-bold tracking-tight">JobPortal</span>
+          <span className="text-lg font-bold tracking-tight">DreamBridge</span>
         </Link>
         <nav className="hidden md:flex items-center gap-1">
-          <NavLink to="/" end className={linkCls}>Home</NavLink>
-          <NavLink to="/jobs" className={linkCls}>Browse Jobs</NavLink>
-          {isAuthenticated && <NavLink to="/dashboard" className={linkCls}>Dashboard</NavLink>}
-          {isAuthenticated && user?.role === 'JOB_SEEKER' && <NavLink to="/my-applications" className={linkCls}>My Applications</NavLink>}
-          {isAuthenticated && user?.role === 'EMPLOYER' && <NavLink to="/manage-jobs" className={linkCls}>Manage Jobs</NavLink>}
-          {isAuthenticated && user?.role === 'EMPLOYER' && <NavLink to="/post-job" className={linkCls}>Post Job</NavLink>}
+          {/* Employer Specific Nav */}
+          {isAuthenticated && user?.role === 'EMPLOYER' && (
+            <>
+              <NavLink to="/" end className={linkCls}>Home</NavLink>
+              <NavLink to="/dashboard" className={linkCls}>Dashboard</NavLink>
+              <NavLink to="/manage-jobs" className={linkCls}>Manage Jobs</NavLink>
+              <NavLink to="/post-job" className={linkCls}>Post Job</NavLink>
+            </>
+          )}
+
+          {/* Job Seeker Specific Nav */}
+          {isAuthenticated && user?.role === 'JOB_SEEKER' && (
+            <>
+              <NavLink to="/" end className={linkCls}>Home</NavLink>
+              <NavLink to="/dashboard" className={linkCls}>Dashboard</NavLink>
+              <NavLink to="/my-applications" className={linkCls}>My Applications</NavLink>
+            </>
+          )}
           {isAuthenticated && user?.role === 'ADMIN' && (
             <NavLink to="/admin" className={({ isActive }) =>
               `px-3 py-2 rounded-lg text-sm font-semibold transition ${isActive ? 'bg-indigo-600 text-white' : 'text-indigo-700 hover:bg-indigo-50'}`
