@@ -19,7 +19,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.*;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Configuration
@@ -58,10 +57,11 @@ public class SecurityConfig {
             .csrf(AbstractHttpConfigurer::disable)
             .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(a -> a
-                // ✅ VERY IMPORTANT (fixes your error)
+
+                // ✅ allow preflight
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
-                // public endpoints
+                // public
                 .requestMatchers("/api/auth/**").permitAll()
                 .requestMatchers("/api/jobs/public/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/uploads/resume/**").permitAll()
@@ -70,7 +70,6 @@ public class SecurityConfig {
                 // admin
                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
 
-                // others
                 .anyRequest().authenticated()
             )
             .headers(h -> h.frameOptions(f -> f.disable()))
@@ -82,13 +81,16 @@ public class SecurityConfig {
 
     @Bean
     public CorsConfigurationSource corsSource() {
+
         CorsConfiguration c = new CorsConfiguration();
 
-        // allow your frontend
-        c.setAllowedOrigins(Arrays.asList(allowedOrigins.split(",")));
+        // ✅ IMPORTANT FIX: use origin patterns (fixes Render + CORS issues)
+        c.setAllowedOriginPatterns(List.of("*"));
 
         c.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
         c.setAllowedHeaders(List.of("*"));
+
+        // ❌ MUST be false-safe for JWT + cookies in cross domain
         c.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource s = new UrlBasedCorsConfigurationSource();
