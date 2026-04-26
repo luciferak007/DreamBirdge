@@ -18,14 +18,14 @@ export default function Home() {
           </form>
           <div className="mt-6 flex items-center justify-center gap-3">
             <Link to="/jobs" className="btn-ghost">Browse all jobs</Link>
-            <Link to="/register" className="btn-primary">Create free account</Link>
+            
           </div>
         </motion.div>
         <div className="mt-20 grid md:grid-cols-3 gap-6">
           {[
             { t: 'For Job Seekers', d: 'Discover jobs that fit you, apply with one click, and track every application.' },
             { t: 'For Employers', d: 'Post openings, review applicants, and manage your hiring pipeline.' },
-            { t: 'Secure & Modern', d: 'JWT authentication, role-based access, and a delightful UI.' }
+            { t: 'Our Bridge', d: 'Dream Bridge serves to bridge the gap between ambition and industry-leading roles.' }
           ].map((f,i) => (
             <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i*0.1 }} className="card">
               <h3 className="text-lg font-semibold">{f.t}</h3>
