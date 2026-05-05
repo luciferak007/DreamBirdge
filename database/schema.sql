@@ -1,5 +1,6 @@
--- PostgreSQL version
+-- PostgreSQL compatible schema
 
+-- USERS
 CREATE TABLE IF NOT EXISTS users (
   id BIGSERIAL PRIMARY KEY,
   email VARCHAR(255) NOT NULL UNIQUE,
@@ -12,6 +13,7 @@ CREATE TABLE IF NOT EXISTS users (
   created_at TIMESTAMP
 );
 
+-- JOBS
 CREATE TABLE IF NOT EXISTS jobs (
   id BIGSERIAL PRIMARY KEY,
   title VARCHAR(255) NOT NULL,
@@ -26,10 +28,14 @@ CREATE TABLE IF NOT EXISTS jobs (
   employer_id BIGINT NOT NULL,
   posted_at TIMESTAMP,
   active BOOLEAN DEFAULT TRUE,
-  CONSTRAINT fk_jobs_employer FOREIGN KEY (employer_id)
-    REFERENCES users(id) ON DELETE CASCADE
+
+  CONSTRAINT fk_jobs_employer
+    FOREIGN KEY (employer_id)
+    REFERENCES users(id)
+    ON DELETE CASCADE
 );
 
+-- APPLICATIONS
 CREATE TABLE IF NOT EXISTS applications (
   id BIGSERIAL PRIMARY KEY,
   job_id BIGINT NOT NULL,
@@ -38,14 +44,21 @@ CREATE TABLE IF NOT EXISTS applications (
   resume_url VARCHAR(500),
   status VARCHAR(32) NOT NULL DEFAULT 'PENDING',
   applied_at TIMESTAMP,
-  UNIQUE (job_id, applicant_id),
-  CONSTRAINT fk_app_job FOREIGN KEY (job_id)
-    REFERENCES jobs(id) ON DELETE CASCADE,
-  CONSTRAINT fk_app_user FOREIGN KEY (applicant_id)
-    REFERENCES users(id) ON DELETE CASCADE
+
+  CONSTRAINT uniq_app UNIQUE (job_id, applicant_id),
+
+  CONSTRAINT fk_app_job
+    FOREIGN KEY (job_id)
+    REFERENCES jobs(id)
+    ON DELETE CASCADE,
+
+  CONSTRAINT fk_app_user
+    FOREIGN KEY (applicant_id)
+    REFERENCES users(id)
+    ON DELETE CASCADE
 );
 
--- ✅ IMPORTANT TABLE (your issue is here)
+-- ✅ AUDIT LOGS (FIXED FOR POSTGRESQL)
 CREATE TABLE IF NOT EXISTS audit_logs (
   id BIGSERIAL PRIMARY KEY,
   action VARCHAR(32) NOT NULL,
@@ -54,10 +67,10 @@ CREATE TABLE IF NOT EXISTS audit_logs (
   actor_email VARCHAR(255) NOT NULL,
   actor_role VARCHAR(32),
   details VARCHAR(2000),
-  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Indexes (PostgreSQL style)
+-- INDEXES
 CREATE INDEX IF NOT EXISTS idx_audit_entity ON audit_logs(entity_type);
 CREATE INDEX IF NOT EXISTS idx_audit_actor ON audit_logs(actor_email);
 CREATE INDEX IF NOT EXISTS idx_audit_created ON audit_logs(created_at);
